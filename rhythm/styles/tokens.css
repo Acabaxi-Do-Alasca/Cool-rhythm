@@ -1,0 +1,55 @@
+/* Tokens do Cool Rhythm: cores, tipografia, espaços e medidas.
+   As outras folhas só usam estas variáveis; quando a identidade nova
+   ficar pronta, basta trocar os valores aqui. */
+:root {
+    /* Marca (dourado tirado do logo atual) */
+    --destaque: #F0D85A;
+    --destaque-forte: #FFE779;
+    --destaque-texto: #141204;   /* texto em cima do dourado */
+
+    /* Superfícies, da mais escura para a mais clara */
+    --fundo: #070707;            /* mesmo preto do fundo do logo */
+    --superficie: #141414;
+    --superficie-2: #1E1E1E;
+    --superficie-3: #2A2A2A;
+    --superficie-hover: #262626;
+
+    /* Texto (todos passam no contraste AA sobre --superficie) */
+    --texto: #F5F5F5;
+    --texto-suave: #B3B3B3;
+    --texto-fraco: #8C8C8C;
+    --borda: #2E2E2E;
+
+    --erro: #FF8A80;
+
+    /* Tipografia */
+    --fonte: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --tamanho-xs: .75rem;
+    --tamanho-sm: .875rem;
+    --tamanho-md: 1rem;
+    --tamanho-lg: 1.25rem;
+    --tamanho-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    --tamanho-xxl: clamp(2rem, 1.4rem + 3vw, 4rem);
+
+    /* Espaços */
+    --esp-1: .25rem;
+    --esp-2: .5rem;
+    --esp-3: .75rem;
+    --esp-4: 1rem;
+    --esp-5: 1.5rem;
+    --esp-6: 2rem;
+
+    /* Raios e sombras */
+    --raio-sm: 4px;
+    --raio: 8px;
+    --raio-lg: 12px;
+    --raio-total: 999px;
+    --sombra: 0 8px 24px rgba(0, 0, 0, .5);
+
+    /* Medidas do layout */
+    --largura-menu: 280px;
+    --altura-player: 88px;
+    --altura-nav-celular: 60px;
+
+    --transicao: 150ms ease;
+}

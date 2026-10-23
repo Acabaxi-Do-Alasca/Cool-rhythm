@@ -1,0 +1,889 @@
+/* Componentes: botões, capas, cartões, lista de músicas, cabeçalho de
+   coleção, busca, diálogo e avisos. */
+
+/* ---------- Botões ---------- */
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--esp-2);
+    min-height: 40px;
+    padding: var(--esp-2) var(--esp-5);
+    border-radius: var(--raio-total);
+    font-weight: 700;
+    white-space: nowrap;
+    transition: transform var(--transicao), background-color var(--transicao), color var(--transicao);
+}
+
+.botao:hover {
+    text-decoration: none;
+    transform: scale(1.04);
+}
+
+.botao-claro {
+    background: var(--texto);
+    color: var(--fundo);
+}
+
+.botao-destaque {
+    background: var(--destaque);
+    color: var(--destaque-texto);
+}
+
+.botao-destaque:hover {
+    background: var(--destaque-forte);
+}
+
+.botao-texto {
+    padding-inline: var(--esp-3);
+    color: var(--texto-suave);
+}
+
+.botao-texto:hover {
+    color: var(--texto);
+}
+
+.botao-contorno {
+    border: 1px solid var(--texto-fraco);
+    color: var(--texto);
+}
+
+.botao-contorno:hover {
+    border-color: var(--texto);
+}
+
+.botao-icone {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--raio-total);
+    color: var(--texto-suave);
+    transition: color var(--transicao), transform var(--transicao);
+}
+
+.botao-icone svg {
+    width: 20px;
+    height: 20px;
+}
+
+.botao-icone:hover:not(:disabled) {
+    color: var(--texto);
+    transform: scale(1.06);
+}
+
+.botao-icone[aria-pressed="true"] {
+    color: var(--destaque);
+}
+
+/* Coração cheio quando a música está curtida. */
+.botao-curtir[aria-pressed="true"] svg {
+    fill: currentColor;
+}
+
+.botao-play {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--raio-total);
+    background: var(--destaque);
+    color: var(--destaque-texto);
+    box-shadow: var(--sombra);
+    transition: transform var(--transicao), background-color var(--transicao);
+}
+
+.botao-play svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
+.botao-play:hover {
+    background: var(--destaque-forte);
+    transform: scale(1.06);
+}
+
+.botao-play-grande {
+    width: 56px;
+    height: 56px;
+}
+
+.botao-play-grande svg {
+    width: 26px;
+    height: 26px;
+}
+
+/* ---------- Capas ---------- */
+.capa {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: var(--raio);
+    background: var(--superficie-3);
+}
+
+.capa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Capa feita só com CSS: degradê a partir de --matiz e o nome por cima. */
+.capa-gerada {
+    display: flex;
+    align-items: flex-end;
+    padding: 10%;
+    background:
+        radial-gradient(circle at 80% 15%, hsl(calc(var(--matiz, 45) + 30) 80% 60% / .55), transparent 55%),
+        linear-gradient(135deg, hsl(var(--matiz, 45) 65% 42%), hsl(calc(var(--matiz, 45) + 40) 60% 16%));
+    color: #fff;
+    font-size: clamp(.8rem, .6rem + .8vw, 1.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .35);
+}
+
+.capa-gerada.capa-curtidas {
+    --matiz: 45;
+    align-items: center;
+    justify-content: center;
+}
+
+.capa-gerada.capa-curtidas svg {
+    width: 40%;
+    height: 40%;
+    fill: currentColor;
+}
+
+.capa-redonda {
+    border-radius: 50%;
+}
+
+/* ---------- Seções da página ---------- */
+.saudacao {
+    margin: var(--esp-4) 0 var(--esp-5);
+    font-size: var(--tamanho-xl);
+}
+
+.secao + .secao {
+    margin-top: var(--esp-6);
+}
+
+.secao-cabecalho {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--esp-4);
+    margin-bottom: var(--esp-3);
+}
+
+.secao-cabecalho h2 {
+    font-size: var(--tamanho-lg);
+}
+
+.secao-cabecalho a,
+.secao-cabecalho button {
+    flex: none;
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+    font-weight: 700;
+}
+
+.secao-cabecalho button:hover {
+    color: var(--texto);
+    text-decoration: underline;
+}
+
+/* Fileira que rola para o lado; com "Mostrar tudo" vira grade. */
+.fileira {
+    display: grid;
+    grid-auto-columns: minmax(150px, 180px);
+    grid-auto-flow: column;
+    gap: var(--esp-2);
+    overflow-x: auto;
+    margin-inline: calc(var(--esp-3) * -1);
+    padding: 0 var(--esp-3) var(--esp-2);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+}
+
+.fileira > * {
+    scroll-snap-align: start;
+}
+
+.fileira.expandida {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-auto-flow: row;
+    overflow: visible;
+}
+
+.fileira-larga {
+    grid-auto-columns: minmax(200px, 240px);
+}
+
+.fileira-larga.expandida {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--esp-2);
+    margin-inline: calc(var(--esp-3) * -1);
+}
+
+/* ---------- Cartões (playlist, artista, lançamento) ---------- */
+.cartao {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--esp-1);
+    padding: var(--esp-3);
+    border-radius: var(--raio);
+    transition: background-color var(--transicao);
+}
+
+.cartao:hover,
+.cartao:focus-within {
+    background: var(--superficie-hover);
+}
+
+.cartao-capa {
+    position: relative;
+    margin-bottom: var(--esp-2);
+}
+
+.cartao .capa {
+    box-shadow: var(--sombra);
+}
+
+.cartao-largo .capa {
+    aspect-ratio: 3 / 2;
+}
+
+.cartao h3 {
+    overflow: hidden;
+    font-size: var(--tamanho-md);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* O link do título cobre o cartão inteiro. */
+.cartao-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.cartao-link:hover {
+    text-decoration: none;
+}
+
+.cartao p {
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.cartao p a {
+    position: relative;
+    z-index: 2;
+}
+
+.cartao-capa .botao-play {
+    position: absolute;
+    right: var(--esp-2);
+    bottom: var(--esp-2);
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--transicao), transform var(--transicao), background-color var(--transicao);
+}
+
+.cartao:hover .botao-play,
+.cartao:focus-within .botao-play,
+.cartao .botao-play.tocando {
+    opacity: 1;
+    transform: none;
+}
+
+/* Em telas de toque não existe hover: o botão fica sempre visível. */
+@media (hover: none) {
+    .cartao .botao-play {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- Atalhos do topo da página inicial ---------- */
+/* No máximo 3 colunas, para os 6 artistas formarem um bloco fechado. */
+.atalhos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max(220px, calc((100% - 2 * var(--esp-2)) / 3)), 1fr));
+    gap: var(--esp-2);
+}
+
+.atalho {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+    overflow: hidden;
+    padding-right: var(--esp-3);
+    border-radius: var(--raio-sm);
+    background: var(--superficie-2);
+    transition: background-color var(--transicao);
+}
+
+.atalho:hover,
+.atalho:focus-within {
+    background: var(--superficie-3);
+}
+
+.atalho .capa {
+    flex: none;
+    width: 64px;
+    border-radius: 0;
+    box-shadow: var(--sombra);
+}
+
+.atalho a {
+    flex: 1;
+    overflow: hidden;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.atalho .botao-play {
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+    transition: opacity var(--transicao), transform var(--transicao);
+}
+
+.atalho .botao-play svg {
+    width: 18px;
+    height: 18px;
+}
+
+.atalho:hover .botao-play,
+.atalho:focus-within .botao-play,
+.atalho .botao-play.tocando {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .atalho .botao-play {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 760px) {
+    .atalhos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .atalho .capa {
+        width: 52px;
+    }
+
+    .atalho a {
+        font-size: var(--tamanho-sm);
+    }
+
+    .atalho .botao-play {
+        display: none;
+    }
+}
+
+/* ---------- Lista de músicas ---------- */
+.faixas {
+    display: grid;
+}
+
+.faixa {
+    display: grid;
+    grid-template-columns: 32px 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--esp-3);
+    padding: var(--esp-2) var(--esp-3);
+    border-radius: var(--raio-sm);
+    transition: background-color var(--transicao);
+}
+
+.faixa:hover,
+.faixa:focus-within {
+    background: var(--superficie-hover);
+}
+
+.faixa-numero {
+    display: grid;
+    place-items: center;
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+    font-variant-numeric: tabular-nums;
+}
+
+.faixa-numero > * {
+    grid-area: 1 / 1;
+}
+
+.faixa-tocar {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: var(--texto);
+    opacity: 0;
+}
+
+.faixa-tocar svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.faixa:hover .faixa-tocar,
+.faixa:focus-within .faixa-tocar,
+.faixa-tocar:focus-visible {
+    opacity: 1;
+}
+
+.faixa:hover .faixa-indice,
+.faixa:focus-within .faixa-indice {
+    opacity: 0;
+}
+
+.faixa .capa {
+    width: 44px;
+    border-radius: var(--raio-sm);
+    font-size: 0;   /* capa pequena demais para o nome */
+}
+
+.faixa-info {
+    display: grid;
+    min-width: 0;
+}
+
+.faixa-titulo,
+.faixa-artistas {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.faixa-titulo {
+    font-weight: 500;
+}
+
+.faixa-artistas {
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+}
+
+.faixa-artistas a:hover {
+    color: var(--texto);
+}
+
+.faixa-acoes {
+    display: flex;
+    align-items: center;
+}
+
+/* Botões secundários só aparecem no hover (o coração fica se estiver curtido). */
+.faixa-acoes .botao-icone {
+    opacity: 0;
+}
+
+.faixa:hover .faixa-acoes .botao-icone,
+.faixa:focus-within .faixa-acoes .botao-icone,
+.faixa-acoes .botao-curtir[aria-pressed="true"] {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .faixa-tocar {
+        opacity: 0;
+    }
+
+    .faixa-acoes .botao-icone {
+        opacity: 1;
+    }
+}
+
+/* Música que está tocando agora */
+.faixa.tocando .faixa-titulo {
+    color: var(--destaque);
+}
+
+.equalizador {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+}
+
+.equalizador i {
+    width: 3px;
+    height: 100%;
+    background: var(--destaque);
+    transform-origin: bottom;
+    animation: equalizar 900ms ease-in-out infinite;
+}
+
+.equalizador i:nth-child(2) {
+    animation-delay: -300ms;
+}
+
+.equalizador i:nth-child(3) {
+    animation-delay: -600ms;
+}
+
+.equalizador.pausado i {
+    animation-play-state: paused;
+}
+
+@keyframes equalizar {
+    0%, 100% { transform: scaleY(.3); }
+    50% { transform: scaleY(1); }
+}
+
+@media (max-width: 760px) {
+    .faixa {
+        grid-template-columns: 44px minmax(0, 1fr) auto;
+        padding-inline: 0;
+    }
+
+    .faixa-numero {
+        display: none;
+    }
+}
+
+/* ---------- Cabeçalho de playlist / artista ---------- */
+.colecao-topo {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--esp-5);
+    margin: calc(var(--esp-2) * -1) calc(var(--esp-5) * -1) 0;
+    padding: var(--esp-6) var(--esp-5) var(--esp-5);
+    background: linear-gradient(hsl(var(--matiz, 45) 45% 32%), hsl(var(--matiz, 45) 30% 14%));
+}
+
+.colecao-topo .capa {
+    flex: none;
+    width: clamp(128px, 18vw, 220px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .55);
+}
+
+.colecao-tipo {
+    font-size: var(--tamanho-sm);
+    font-weight: 600;
+}
+
+.colecao-topo h1 {
+    margin: var(--esp-2) 0 var(--esp-3);
+    font-size: var(--tamanho-xxl);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.colecao-descricao {
+    color: rgba(255, 255, 255, .75);
+    font-size: var(--tamanho-sm);
+}
+
+.colecao-meta {
+    margin-top: var(--esp-2);
+    font-size: var(--tamanho-sm);
+    font-weight: 600;
+}
+
+.colecao-acoes {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+    margin: 0 calc(var(--esp-5) * -1) var(--esp-3);
+    padding: var(--esp-5) var(--esp-5) var(--esp-2);
+    background: linear-gradient(hsl(var(--matiz, 45) 30% 14% / .6), transparent 120px);
+}
+
+.colecao-acoes .botao-icone {
+    width: 44px;
+    height: 44px;
+}
+
+.colecao-acoes .botao-icone svg {
+    width: 26px;
+    height: 26px;
+}
+
+@media (max-width: 760px) {
+    .colecao-topo {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-inline: calc(var(--esp-4) * -1);
+        padding: var(--esp-5) var(--esp-4) var(--esp-4);
+    }
+
+    .colecao-topo .capa {
+        align-self: center;
+        width: 55vw;
+        max-width: 240px;
+    }
+
+    .colecao-topo h1 {
+        font-size: var(--tamanho-xl);
+    }
+
+    .colecao-acoes {
+        margin-inline: calc(var(--esp-4) * -1);
+        padding-inline: var(--esp-4);
+    }
+}
+
+/* ---------- Busca ---------- */
+.campo-busca {
+    position: relative;
+    max-width: 420px;
+    margin: var(--esp-2) 0 var(--esp-5);
+}
+
+.campo-busca svg {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    width: 20px;
+    height: 20px;
+    color: var(--texto-suave);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.campo-busca input {
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--esp-4) 0 46px;
+    border: 2px solid transparent;
+    border-radius: var(--raio-total);
+    background: var(--superficie-3);
+    color: var(--texto);
+}
+
+.campo-busca input::placeholder {
+    color: var(--texto-fraco);
+}
+
+.campo-busca input:hover {
+    border-color: var(--superficie-hover);
+    background: var(--superficie-hover);
+}
+
+.campo-busca input:focus {
+    border-color: var(--texto);
+    outline: none;
+}
+
+/* Blocos coloridos de "Navegar por todas" */
+.generos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--esp-4);
+}
+
+.genero {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    padding: var(--esp-4);
+    border-radius: var(--raio);
+    background: hsl(var(--matiz, 45) 60% 38%);
+    font-size: var(--tamanho-lg);
+    font-weight: 800;
+    line-height: 1.15;
+    transition: filter var(--transicao);
+}
+
+.genero:hover {
+    filter: brightness(1.12);
+    text-decoration: none;
+}
+
+.genero::after {
+    content: "";
+    position: absolute;
+    right: -12%;
+    bottom: -12%;
+    width: 45%;
+    aspect-ratio: 1;
+    border-radius: var(--raio);
+    background: linear-gradient(135deg, hsl(calc(var(--matiz, 45) + 30) 70% 60%), hsl(calc(var(--matiz, 45) + 60) 60% 30%));
+    box-shadow: var(--sombra);
+    transform: rotate(25deg);
+}
+
+@media (max-width: 760px) {
+    .campo-busca {
+        max-width: none;
+    }
+
+    .generos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--esp-3);
+    }
+
+    .genero {
+        font-size: var(--tamanho-md);
+    }
+}
+
+/* ---------- Estado vazio ---------- */
+.vazio {
+    display: grid;
+    justify-items: center;
+    gap: var(--esp-3);
+    padding: var(--esp-6) var(--esp-4);
+    color: var(--texto-suave);
+    text-align: center;
+}
+
+.vazio svg {
+    width: 48px;
+    height: 48px;
+    color: var(--texto-fraco);
+}
+
+.vazio strong {
+    color: var(--texto);
+    font-size: var(--tamanho-lg);
+}
+
+/* ---------- Diálogo ---------- */
+.dialogo {
+    width: min(420px, calc(100vw - 32px));
+    margin: auto;
+    padding: var(--esp-5);
+    border: 0;
+    border-radius: var(--raio-lg);
+    background: var(--superficie-2);
+    color: var(--texto);
+    box-shadow: var(--sombra);
+}
+
+.dialogo::backdrop {
+    background: rgba(0, 0, 0, .7);
+}
+
+.dialogo h2 {
+    margin-bottom: var(--esp-4);
+    font-size: var(--tamanho-lg);
+}
+
+.dialogo label {
+    display: block;
+    margin-bottom: var(--esp-2);
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+    font-weight: 600;
+}
+
+.dialogo input[type="text"] {
+    width: 100%;
+    height: 44px;
+    padding: 0 var(--esp-3);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-sm);
+    background: var(--superficie-3);
+}
+
+.dialogo input[type="text"]:focus {
+    border-color: var(--texto);
+    outline: none;
+}
+
+.dialogo-lista {
+    display: grid;
+    gap: var(--esp-1);
+    max-height: 50vh;
+    overflow-y: auto;
+    margin-bottom: var(--esp-2);
+}
+
+.dialogo-lista button {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+    width: 100%;
+    padding: var(--esp-2);
+    border-radius: var(--raio-sm);
+    text-align: left;
+}
+
+.dialogo-lista button:hover {
+    background: var(--superficie-hover);
+}
+
+.dialogo-lista .capa {
+    width: 40px;
+    flex: none;
+    font-size: 0;
+}
+
+.dialogo-lista small {
+    display: block;
+    color: var(--texto-suave);
+}
+
+.dialogo-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--esp-2);
+    margin-top: var(--esp-5);
+}
+
+/* ---------- Avisos rápidos ---------- */
+.avisos {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--altura-player) + var(--esp-5));
+    z-index: 50;
+    display: grid;
+    gap: var(--esp-2);
+    justify-items: center;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.aviso {
+    padding: var(--esp-2) var(--esp-4);
+    border-radius: var(--raio);
+    background: var(--texto);
+    color: var(--fundo);
+    font-size: var(--tamanho-sm);
+    font-weight: 600;
+    box-shadow: var(--sombra);
+    animation: aparecer 200ms ease-out;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+@media (max-width: 760px) {
+    .avisos {
+        bottom: calc(var(--altura-nav-celular) + 76px);
+    }
+}

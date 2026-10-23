@@ -1,0 +1,294 @@
+/* Estrutura do app: menu lateral, barra do topo, área de conteúdo,
+   player fixo embaixo e, no celular, a barra de navegação inferior. */
+.app {
+    display: grid;
+    grid-template-columns: var(--largura-menu) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "menu area"
+        "player player";
+    gap: var(--esp-2);
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--esp-2);
+}
+
+/* ---------- Menu lateral ---------- */
+.menu-lateral {
+    grid-area: menu;
+    display: flex;
+    flex-direction: column;
+    gap: var(--esp-2);
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--esp-3);
+    border-radius: var(--raio-lg);
+    background: var(--fundo);
+    scrollbar-width: thin;
+}
+
+.marca {
+    display: block;
+    align-self: center;
+    width: 150px;
+    margin-bottom: var(--esp-2);
+}
+
+.marca:hover {
+    text-decoration: none;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: var(--esp-4);
+    width: 100%;
+    padding: var(--esp-2) var(--esp-3);
+    border-radius: var(--raio);
+    color: var(--texto-suave);
+    font-weight: 600;
+    text-align: left;
+    transition: color var(--transicao), background-color var(--transicao);
+}
+
+.menu-link svg {
+    flex: none;
+    width: 24px;
+    height: 24px;
+}
+
+.menu-link:hover {
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.menu-link[aria-current="page"] {
+    color: var(--texto);
+}
+
+.menu-link[aria-current="page"] svg {
+    color: var(--destaque);
+}
+
+.menu-bloco {
+    padding-top: var(--esp-3);
+}
+
+/* Quadradinho colorido atrás dos ícones de "Criar playlist" e "Curtidas". */
+.menu-icone-caixa {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--raio-sm);
+    background: var(--texto-suave);
+    color: var(--fundo);
+    transition: background-color var(--transicao);
+}
+
+.menu-icone-caixa svg {
+    width: 18px;
+    height: 18px;
+}
+
+.menu-link:hover .menu-icone-caixa {
+    background: var(--texto);
+}
+
+.menu-icone-caixa.curtidas,
+.menu-link:hover .menu-icone-caixa.curtidas {
+    background: linear-gradient(135deg, var(--destaque), #B8860B);
+}
+
+.menu-divisor {
+    height: 1px;
+    margin: var(--esp-2) var(--esp-3);
+    border: 0;
+    background: var(--borda);
+}
+
+.menu-playlists {
+    flex: 1;
+}
+
+.menu-playlists-titulo {
+    padding: var(--esp-1) var(--esp-3) var(--esp-2);
+    color: var(--texto-fraco);
+    font-size: var(--tamanho-xs);
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.menu-playlists ul + .menu-playlists-titulo {
+    margin-top: var(--esp-4);
+}
+
+.menu-playlists a {
+    display: block;
+    overflow: hidden;
+    padding: var(--esp-1) var(--esp-3);
+    border-radius: var(--raio-sm);
+    color: var(--texto-suave);
+    font-size: var(--tamanho-sm);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.menu-playlists a:hover {
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.menu-playlists a[aria-current="page"] {
+    color: var(--destaque);
+}
+
+.menu-rodape {
+    display: grid;
+    gap: var(--esp-3);
+    padding: var(--esp-4) var(--esp-3) var(--esp-2);
+    color: var(--texto-fraco);
+    font-size: var(--tamanho-xs);
+}
+
+.idioma {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: var(--esp-2);
+    padding: var(--esp-2) var(--esp-4);
+    border: 1px solid var(--texto-fraco);
+    border-radius: var(--raio-total);
+    color: var(--texto);
+    font-size: var(--tamanho-sm);
+    font-weight: 600;
+}
+
+.idioma svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ---------- Área de conteúdo ---------- */
+.area {
+    grid-area: area;
+    position: relative;
+    min-height: 0;
+    overflow-y: auto;
+    border-radius: var(--raio-lg);
+    background: var(--superficie);
+    scrollbar-width: thin;
+}
+
+.area:focus {
+    outline: none;
+}
+
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: var(--esp-3);
+    padding: var(--esp-3) var(--esp-5);
+    background: rgba(20, 20, 20, .85);
+    backdrop-filter: blur(12px);
+}
+
+.topo-marca {
+    display: none;
+    width: 84px;
+}
+
+.topo-espaco {
+    flex: 1;
+}
+
+#conteudo {
+    padding: var(--esp-2) var(--esp-5) var(--esp-6);
+}
+
+#conteudo:focus {
+    outline: none;
+}
+
+/* ---------- Navegação inferior (só no celular) ---------- */
+.nav-celular {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .app {
+        --largura-menu: 220px;
+    }
+}
+
+/* ---------- Celular e tablet pequeno ---------- */
+@media (max-width: 760px) {
+    .app {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "area"
+            "player"
+            "nav";
+        gap: 0;
+        padding: 0;
+    }
+
+    .menu-lateral {
+        display: none;
+    }
+
+    .area {
+        border-radius: 0;
+    }
+
+    .topo {
+        padding: var(--esp-2) var(--esp-4);
+    }
+
+    .topo-marca {
+        display: block;
+    }
+
+    #conteudo {
+        padding: var(--esp-2) var(--esp-4) var(--esp-5);
+    }
+
+    .nav-celular {
+        grid-area: nav;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        height: var(--altura-nav-celular);
+        background: var(--fundo);
+    }
+
+    .nav-celular a {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 2px;
+        color: var(--texto-suave);
+        font-size: 11px;
+    }
+
+    .nav-celular a:hover {
+        text-decoration: none;
+    }
+
+    .nav-celular svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .nav-celular a[aria-current="page"] {
+        color: var(--texto);
+    }
+
+    .nav-celular a[aria-current="page"] svg {
+        color: var(--destaque);
+    }
+}
